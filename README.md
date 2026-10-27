@@ -311,6 +311,22 @@ competition data
 → Kaggle submission
 ```
 
+**Note on the filename:** despite `convnextv2` in the notebook name, the model is **ConvNeXt V1 Tiny**, loaded from the `timm` checkpoint `convnext_tiny.fb_in1k` (supervised ImageNet-1K). The notebook's first cell states this. If that checkpoint cannot be loaded, the notebook falls back to TorchVision's `ConvNeXt_Tiny_Weights.IMAGENET1K_V1`; the committed run used `convnext_tiny.fb_in1k`.
+
+## Reproducing
+
+The notebook was written for and run on **Google Colab with one NVIDIA T4 GPU**.
+
+1. Join the Kaggle competition `ka-ss-26-challenge-4` and download a Kaggle API token (`kaggle.json`).
+2. Open the notebook in Colab, select a T4 GPU runtime, and upload `kaggle.json` to `/content/kaggle.json`.
+3. Run all cells (**Runtime → Run all**). The notebook:
+   * installs `kaggle`, `timm==1.0.26`, `soxr==1.0.0`, and `soundfile==0.13.1` on top of Colab's preinstalled PyTorch and torchaudio;
+   * downloads and extracts the competition data into `/content/challenge4_data`;
+   * uses the 5-fold assignment embedded in the notebook, checked against stored SHA-256 hashes;
+   * writes `submission_notebook4.csv`, the OOF and test probabilities, a config file and a report to `/content/notebook4_outputs/`, plus `/content/notebook4_outputs.zip`.
+
+The seed is fixed at 42 with deterministic cuDNN settings. In the committed run, five-fold training took about 10 minutes and test inference about 12 seconds; the notebook estimates 18–30 minutes end to end, including package installation and data download.
+
 ## Notes
 
 This repository is intended as a reproducible record of the modelling approach and competition methodology.
